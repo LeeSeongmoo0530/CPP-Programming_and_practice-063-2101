@@ -1,107 +1,127 @@
+#ifndef __SCREEN_H_
+#define __SCREEN_H_
 #include<iostream>
 #include<Windows.h>
-#include<conio.h> // _getch()ÇÔ¼ö¸¦ »ç¿ëÇÏ±âÀ§ÇÑ Çì´õÆÄÀÏ
-
+#include<conio.h> // _getch()í•¨ìˆ˜ë¥¼ ì‚¬ìš©í•˜ê¸°ìœ„í•œ í—¤ë”íŒŒì¼
+#include"Brick.h"
+#include "Bar.h"
 
 using namespace std;
 
 
-//°¡·Î 50 ¼¼·Î 25 ±×¸²µé ÇÏ³ª Å©Å°´Â 2 X 1
+//ê°€ë¡œ 50 ì„¸ë¡œ 25 ê·¸ë¦¼ë“¤ í•˜ë‚˜ í¬í‚¤ëŠ” 2 X 1
 //(0,0) ---------------------------> x
-//	£ü
-//	£ü
-// 	£ü
-// 	£ü
-// 	£ü
-// 	£ü
-// 	£ü
-// 	£ü
-// 	£ü 
-//  ¡ı 
+//	ï½œ
+//	ï½œ
+// 	ï½œ
+// 	ï½œ
+// 	ï½œ
+// 	ï½œ
+// 	ï½œ
+// 	ï½œ
+// 	ï½œ 
+//  âˆ¨ 
 // y 
  
 
-//ÄÜ¼ÖÃ¢¿¡¼­ Ä¿¼­¸¦ ÀÔ·ÂÇÑ x,yÁÂÇ¥¿¡ À§Ä¡ ½ÃÅ´
+//ì½˜ì†”ì°½ì—ì„œ ì»¤ì„œë¥¼ ì…ë ¥í•œ x,yì¢Œí‘œì— ìœ„ì¹˜ ì‹œí‚´
 void gotoxy(int x, int y)
 {
 	COORD CurSorPosition = { x,y };
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CurSorPosition);
 }
 
-
-
-//Board- °ÔÀÓ¿¡¼­ ¾ç º®À» ±×¸®´Â ÇÔ¼ö
+//Board- ê²Œì„ì—ì„œ ì–‘ ë²½ì„ ê·¸ë¦¬ëŠ” í•¨ìˆ˜ -
 void ScreenLine()
 {
 	gotoxy(0, 0);
-	cout << "¦®¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¯";
+	cout << "â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”“";
 	for (int i = 1; i < 25; i++)
 	{
 		gotoxy(0, i);
-		cout << "¦­                                                ¦­";
+		cout << "â”ƒ                                                â”ƒ";
 	}
 
 	gotoxy(0, 25);
-	cout << "¦±¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦¬¦°";
+	cout << "â”—â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”â”›";
 }
 
 
-//°ÔÀÓ ÃÊ±âÈ­¸é - ³­ÀÌµµ¸¦ ÀÔ·Â¹ŞÀ½
+//ê²Œì„ ì´ˆê¸°í™”ë©´ - ë‚œì´ë„ë¥¼ ì…ë ¥ë°›ìŒ
 int InitScreen()
 {
 
 	gotoxy(2, 2);
 	cout << "********************************************************************\n";
-	cout << "                          º® µ¹ ±ú ±â °Ô ÀÓ                         \n";
+	cout << "                          ë²½ ëŒ ê¹¨ ê¸° ê²Œ ì„                         \n";
 	gotoxy(2, 4);
 	cout << "********************************************************************\n";
 	cout << endl << endl;
-	cout << "                ³­ÀÌµµ¸¦ ¼±ÅÃÇÏ¼¼¿ä 1. »ó   2. Áß   3.ÇÏ";
+	cout << "                ë‚œì´ë„ë¥¼ ì„ íƒí•˜ì„¸ìš” 1. ìƒ   2. ì¤‘   3.í•˜";
 	int Level;
 	while (1)
 	{
-		Level = _getch(); //ASCII ·Î ¹İÈ¯
+		Level = _getch(); //ASCII ë¡œ ë°˜í™˜
 		if (Level > 48 && Level < 52)
 		{
 			break;
 		}
 
 	}
-	return Level;
-
+	//ì½˜ì†”ì°½ ì§€ì›Œì¤Œ
+	system("cls");
+	return (Level-48);
 }
 
 
-//Á¡¼ö Ãâ·Â Ã¢ - Board ¿·¿¡ °è¼Ó Ãâ·Â Áß
-void ScoreScreen(int Level)
+//ì ìˆ˜ì™€ ë‚œì´ë„ ì¶œë ¥ ì°½ - Board ì˜†ì— ê³„ì† ì¶œë ¥
+void ScoreScreen(int Level,Brick& BrickObj)
 {
 
 
-	gotoxy(5, 5);
-	if (Level == '1')
+	gotoxy(55, 5);
+	if (Level == 1)
 	{
-		cout << "³­ÀÌµµ  :  »ó";
+		cout << "ë‚œì´ë„  :  ìƒ";
 	}
-	else if (Level == '2')
+	else if (Level == 2)
 	{
-		cout << "³­ÀÌµµ  :  Áß";
+		cout << "ë‚œì´ë„  :  ì¤‘";
 	}
-	else if (Level == '3')
+	else if (Level == 3)
 	{
-		cout << "³­ÀÌµµ  :  ÇÏ";
+		cout << "ë‚œì´ë„  :  í•˜";
 	}
 
-	gotoxy(5, 7);
-	//Brickobj.Score_print();
+	gotoxy(55, 7);
+	BrickObj.score_print();
 }
 
-
-//¸Å°³º¯¼ö Á¦°ÅÇØ¼­ Render() ÇÏ°í goto¿¡ °¢ Å¬·¡½ºÀÇ ÁÂÇ¥ ´ëÀÔ
-void Render(int x , int y)
+//ê²Œì„ ëë‚ ë•Œ ë„ìš°ëŠ”ì°½
+void EndOfGame()
 {
-	gotoxy(x, y);
-	cout << "¡Ü";  // °ø -Ã³À½ÁÂÇ¥(24,19)
-	cout << "¢Ã";  // ¸·´ë±â - ÀÌ°Ç 3°³ 5°³ 7°³ ÇÏ¸é µÊ Ã³À½ÁÂÇ¥ 3°³ÀÏ¶§-(22,20) 5°³ÀÏ¶§ - (20,20) 7°³ÀÏ¶§ - (18,20)
-	cout << "¡á";  //º®µ¹ °¡·Î 20°³ ¼¼·Î 3ÁÙ
+
 
 }
+
+//ì»¤ì„œ ì•ˆë³´ì´ê²Œ (show=0 ì´ë©´ ì•ˆë³´ì„ 1ì´ë©´ ë³´ì„)
+void CursorView(char show)
+{
+	HANDLE hConsole;
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	ConsoleCursor.bVisible = show;
+	ConsoleCursor.dwSize = 1;
+
+	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+
+//ì½˜ì†”ì°½ í¬ê¸°ì™€ ì œëª©
+void SetConsoleView()
+{
+	system("mode con:cols=50 lines=25");
+	system("title Break_Bricks");}
+
+#endif
