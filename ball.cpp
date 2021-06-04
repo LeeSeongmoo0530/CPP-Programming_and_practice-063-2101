@@ -2,77 +2,89 @@
 #include<cstdlib>
 #include<ctime>
 #include<Windows.h>
-#include"ball.h"
+#include"Ball.h"
 #include"Screen.h"
+#include"Bar.h"
+#include"Brick.h"
 using namespace std;
 
+//ê³µë°˜ì§€ë¦„
+#define R 1
+
+//ë§‰ëŒ€ê¸°ì˜ ë†’ì´
+#define BarHeight 1
+
+//ë¸”ë¡ì˜ ê°€ë¡œê¸¸ì´
+#define BrickWidth 2
+#define BrickHeight 1
+
+//1.Ballì˜ ë©¤ë²„ë³€ìˆ˜ë¥¼ ì‚¬ìš©í•˜ê¸°ìœ„í•œ í•¨ìˆ˜
+int Ball::f_Ball_Get_Direct() const
+{
+	return Ball_Direct;
+}
+int Ball :: f_Ball_Get_X() const
+{
+	return BallX;
+}
+int Ball::f_Ball_Get_Y() const
+{
+	return BallY;
+}
 
 
-//°ÔÀÓÀ» ½ÇÇàÇÒ ¶§ ÃÊ±âÀ§Ä¡¸¦ »ı¼ºÀÚ·Î ¼³Á¤
-BALL::BALL()
+//2.ì´ˆê¸°ë°œì‚¬ ì™¼ìª½ìœ„ orì˜¤ë¥¸ìª½ìœ„
+//ì²˜ìŒì— InitBallí˜¸ì¶œ
+void Ball:: f_InitBALL()
 {
 	BallX = 24;
 	BallY = 19;
-}	
-
-
-
-
-//2.ÃÊ±â¹ß»ç ¿ŞÂÊÀ§ or¿À¸¥ÂÊÀ§
-//Ã³À½¿¡ InitBallÈ£Ãâ
-int BALL:: f_InitBALL()
-{
-	//spcaebar·Î 
-	kbhit();
-
 	InitBallMove = true;
 
 	srand((unsigned int)time(NULL));
+
 	int Startdirect= rand() % 2;
 	if (Startdirect == 1)
 	{
-		Ball_Direct = Right_top;
-		return Ball_Direct;
+		Ball_Direct = Right_top;	
 	}
 	
-	//¿ŞÂÊÀ§
+	//ì™¼ìª½ìœ„
 	else
 	{
 		Ball_Direct = Left_top;
-		return Ball_Direct;
 	}
 }
 
 
-//´Ù¸¥ °´Ã¼µé°ú Ãæµ¹ÇÒ¶§ È£ÃâµÇ¾î °øÀÇ ¹æÇâÀ» ¹Ù²ãÁİ´Ï´Ù
-//3.ÀÌµ¿¹æÇâÇÔ¼ö
-int BALL::f_BALL_Direct(const BALL& b)
+//ë‹¤ë¥¸ ê°ì²´ë“¤ê³¼ ì¶©ëŒí• ë•Œ í˜¸ì¶œë˜ì–´ ê³µì˜ ë°©í–¥ì„ ë°”ê¿”ì¤ë‹ˆë‹¤
+//3.ì´ë™ë°©í–¥í•¨ìˆ˜
+int Ball::f_BALL_Direct()
 {
-	// °øÀÓ ¿òÁ÷ÀÌÁö ¾ÊÀ¸¸é ¸®ÅÏ
-	if (!b.InitBallMove)
+	// ê³µì´ ì›€ì§ì´ì§€ ì•Šìœ¼ë©´ ë¦¬í„´
+	if (!InitBallMove)
 		return false;
 
-	switch (b.Ball_Direct)
+	switch (Ball_Direct)
 	{
-		//°øÀÇ ¹æÇâÀÌ Left_topÀÌ¸é °øÀÇ ¹æÇâÀ» 
+		//ê³µì˜ ë°©í–¥ì´ Left_topì´ë©´ ê³µì˜ ë°©í–¥ì„ Left_downìœ¼ë¡œ ë°”ê¿”ì¤Œ
 	case 0:
 		Ball_Direct = Left_down;
 		BallMoveX = false;
 		BallMoveY = false;
 		return Ball_Direct;
-		//Left_downÀÌ¸é
+		//Left_down -> Left_top
 	case 1:
 		Ball_Direct = Left_top;
 		BallMoveX = false;
 		BallMoveY = true;
 		return Ball_Direct;
-		//Right_topÀÌ¸é
+		//Right_top->Right_down
 	case 2:
 		Ball_Direct = Right_down;
 		BallMoveX = true;
-		BallMoveY = false;
 		return Ball_Direct;
-		//Right_downÀÌ¸é
+		//Right_down -> Right_top
 	case 3:
 		Ball_Direct = Right_top;
 		BallMoveX = true;
@@ -82,84 +94,92 @@ int BALL::f_BALL_Direct(const BALL& b)
 }
 
 
-// ÀÚ·áÇü intÇüÀÌ°í BALL°ú BARÀÇ Speed°¡ 1ÀÌ¿©¼­ ÁÂÇ¥ºñ±³ÇÒ ¶§ =À» ³Ö¾ú½À´Ï´Ù.
-//4.º®µ¹°ú Ãæµ¹
-int BALL::f_BALL_Brick(BALL& ballobj)
+//4.ë²½ëŒê³¼ ì¶©ëŒíŒì • í•¨ìˆ˜
+int Ball::f_BALL_Brick(Brick &Brickobj)
 {
 	if (!InitBallMove) 
 		return false;
 
-	int BallTop = BallY + R;
-	int BallBottom = BallY - R;
-	int BallLeft = BallX - R;
-	int BallRight = BallX + R;
+	int BallTop = BallY;
+	int BallBottom = BallY + R;
+	int BallLeft = BallX ;
+	int BallRight = BallX + 2*R;
 
 	int BrickNumY=3, BrickNumX = 20;
 	int BrickX, BrickY;
 	int BrickLeft, BrickRight, BrickTop, BrickBottom;
-	// Brick[]-XYºí·Ï 2Â÷¿ø ¹è¿­ ,  BrickNumX Y - X, Y ºí·Ï°¹¼ö 
+	// Brick[]-XYë¸”ë¡ 2ì°¨ì› ë°°ì—´ ,  BrickNumX Y - X, Y ë¸”ë¡ê°¯ìˆ˜ 
 	for (int y = 0; y < BrickNumY; y++)
 	{
 		for (int x = 0; x < BrickNumX; x++)
 		{
-			// º®µ¹ÀÌ Á×¾îÀÖ´Â °æ¿ì ´ÙÀ½ ºí·ÏÀ¸·Î
-			//Brick.on ºí·ÏÀÌ »ì¾ÆÀÖ´ÂÁö
-			if (!(Brick[y * BrickNumX + x].on))
+			// ë²½ëŒì´ ì£½ì–´ìˆëŠ” ê²½ìš° ë‹¤ìŒ ë¸”ë¡ìœ¼ë¡œ
+			//Brick.on ë¸”ë¡ì´ ì‚´ì•„ìˆëŠ”ì§€
+			if (!(Brickobj.get_coord(x,y).get_display_signal()==0))
 			{
 				continue;
 			}
 
-			BrickLeft = Brick[y * BrickNumX + x].XÁÂÇ¥-0.5*BrickWidth;
+			BrickLeft = Brickobj.get_coord(x, y).get_x();
 			BrickRight = BrickLeft + BrickWidth;
-			//ºí·ÏÀÇ ÁßÁ¡ÁÂÇ¥ X
-			BrickX = BrickLeft + 0.5 * BrickWidth;
-
-			BrickTop = Brick[y * BrickNumX + x].YÁÂÇ¥ + 0.5*BrickHeight;
+			;
+			BrickTop = Brickobj.get_coord(x, y).get_y();
 			BrickBottom = BrickTop -BrickHeight;
-			//ºí·ÏÀÇ ÁßÁ¡ÁÂÇ¥ Y
-			BrickY = BrickTop - 0.5*BrickHeight;
-
-
-			// °øÇÏ°í º®µ¹ÇÏ°í Ãæµ¹ Ã¼Å©
-
-			// »óÇÏ°¡ ºÎµúÄ¡´Â °æ¿ì
-			if (BallLeft > BrickLeft && BallRight < BrickRight)
+			
+			int index;
+			if (x == 0) 
 			{
-				// ¾Æ·§¸é Ãæµ¹
-				if (BallMoveY && (BallTop > BrickBottom) && (BallTop - BrickBottom <=R)) 
+				index = x + y;
+			}
+			else if (x == 1)
+			{
+				index=x + y + 19;
+			}
+			else if (x == 2)
+			{
+				index=x + y + 39;
+			}
+
+			// ê³µí•˜ê³  ë²½ëŒí•˜ê³  ì¶©ëŒ ì²´í¬
+
+			// ìƒí•˜ê°€ ë¶€ë”ªì¹˜ëŠ” ê²½ìš°
+			if (BallLeft >= BrickLeft && BallRight <= BrickRight)
+			{
+				// ì•„ë«ë©´ ì¶©ëŒ
+				if (BallMoveY && (BallTop >= BrickBottom) && (BallTop - BrickBottom ==0)) 
 				{
-					Brick[y * BrickNumX + x].on = false;
-					return f_BALL_Direct(ballobj);
+					Brickobj.delete_bricks(index);
+					return f_BALL_Direct();
 				}
 
-				// À­¸é Ãæµ¹
-				if (!BallMoveY && (BallBottom < BrickTop) && (BrickBottom - BallTop <= R))
+				// ìœ—ë©´ ì¶©ëŒ
+				if (!BallMoveY && (BallBottom <= BrickTop) && (BallBottom - BrickTop ==0))
 				{
-					Brick[y * BrickNumX + x].on = false;
-					return f_BALL_Direct(ballobj);
+					Brickobj.delete_bricks(index);
+					return f_BALL_Direct();
 				}
 			}
 
-			// ÁÂ¿ì°¡ ºÎµúÄ¡´Â °æ¿ì
+			// ì¢Œìš°ê°€ ë¶€ë”ªì¹˜ëŠ” ê²½ìš°
 			if ( BallTop == BrickTop && BallBottom == BrickBottom)
 			{
-				//¿ŞÂÊ¸é Ãæµ¹
-				if (BallX && (BallRight < BrickLeft) && (BrickLeft - BallRight <= 0.5 * BrickWidth))
+				//ì™¼ìª½ë©´ ì¶©ëŒ
+				if (BallX && (BallRight <= BrickLeft) && (BrickLeft - BallRight ==0))
 				{
-					Brick[y * BrickNumX + x].on = false;
-					return f_BALL_Direct(ballobj);
+					Brickobj.delete_bricks(index);
+					return f_BALL_Direct();
 				}
-				// ¿À¸¥ÂÊ¸é Ãæµ¹
-				if (BallX && (BallLeft > BrickRight) && (BrickRight - BallLeft <=  0.5 * BrickWidth))
+				// ì˜¤ë¥¸ìª½ë©´ ì¶©ëŒ
+				if (BallX && (BallLeft >= BrickRight) && (BrickRight - BallLeft == 0 ))
 				{
-					Brick[y * BrickNumX + x].on = false;
-					return f_BALL_Direct(ballobj);
+					Brickobj.delete_bricks(index);
+					return f_BALL_Direct();
 				}
 			}
 		}
 	}
 
-	//Ãæµ¹ÇÏÁö ¾Ê¾ÒÀ»¶§
+	//ì¶©ëŒí•˜ì§€ ì•Šì•˜ì„ë•Œ
 	return false;
 	
 }
@@ -167,42 +187,47 @@ int BALL::f_BALL_Brick(BALL& ballobj)
 
 
 
-//5.¸·´ë¿Í Ãæµ¹
-int BALL::f_BALL_Bar(BALL& ballobj)
+//5.ë§‰ëŒ€ì™€ ì¶©ëŒíŒì • í•¨ìˆ˜
+int Ball::f_BALL_Bar(Bar& Barobj)
 {
 	if (!InitBallMove)
 	{
 		return false;
 	}
 
-	// °ø ¹æÇâÀÌ À§ÀÌ¸é ¸®ÅÏ
+	// ê³µ ë°©í–¥ì´ ìœ„ì´ë©´ ë¦¬í„´
 	if (BallMoveY) return false;
 
 	
-	int BallBottom = BallY - R;
-	int BallLeft = BallX - R;
-	int BallRight = BallX + R;
-
-	// »ç°¢Çü ¹Ù¿Í ¿øÇü °øÀÇ Ãæµ¹ Ã³¸®
-	// ³ôÀÌ
+	int BallBottom = BallY + R;
+	int BallLeft = BallX;
+	int BallRight = BallX + 2*R;
+	
+	int BarTop = Barobj.Get_Y();
+	int BarBottom= Barobj.Get_Y()-BarHeight;
+	int BarLeft = Barobj.Get_X();
+	int BarRight = Barobj.Get_X()+Barobj.Get_Size(); //+ë ˆë²¨ì— ë”°ë¥¸ ê¸¸ì´;
+	
+	// ì‚¬ê°í˜• ë°”ì™€ ì›í˜• ê³µì˜ ì¶©ëŒ ì²˜ë¦¬
+	// ë†’ì´
 	if (BallBottom >= BarTop && BallBottom <= BarBottom)
 	{
-		// ÁÂ¿ì
+		// ì¢Œìš°
 		if (BallRight > BarLeft && BallLeft < BarRight)
 		{
-			return f_BALL_Direct(ballobj);
+			return f_BALL_Direct();
 		}
 	}
 
-	//Ãæµ¹ÇÏÁö ¾Ê¾ÒÀ»¶§
+	//ì¶©ëŒí•˜ì§€ ì•Šì•˜ì„ë•Œ
 	return false;
 }
 
 
 
 
-//6.º®°ú Ãæµ¹
-int BALL::f_BALL_Board(BALL& ballobj)
+//6.ë²½ê³¼ ì¶©ëŒíŒì • í•¨ìˆ˜
+int Ball::f_BALL_Board(Ball& ballobj)
 
 {
 	if (!InitBallMove)
@@ -210,80 +235,78 @@ int BALL::f_BALL_Board(BALL& ballobj)
 		return false;
 	}
 		
-	int BallTop = BallY - R;
-	int BallBottom = BallY + R;
-	int BallLeft = BallX - R;
-	int BallRight = BallX + R;
+	int BallTop = BallY;
+	int BallBottom = BallY+R;
+	int BallLeft = BallX;
+	int BallRight = BallX + 2*R;
 
 	int BoardLeft = 0;
 	int BoardRight = 50;
 	int BoardTop = 0;
 	int BoardBottom = 25;
 
-	// ¿ŞÂÊ
+	// ì™¼ìª½
 	if (BallLeft <= BoardLeft)
 	{
-		BallX = BoardLeft + R; // À§Ä¡ ÁöÁ¤
-		return f_BALL_Direct(ballobj);
+		BallX = BoardLeft + R; // ìœ„ì¹˜ ì§€ì •
+		return f_BALL_Direct();
 	}
 
-	// ¿À¸¥Á·
+	// ì˜¤ë¥¸ì¡±
 	if (BallRight >= BoardRight)
 	{
 	
-		BallX = BoardRight - R; // À§Ä¡ ÁöÁ¤
-		return f_BALL_Direct(ballobj);
+		BallX = BoardRight - R; // ìœ„ì¹˜ ì§€ì •
+		return f_BALL_Direct();
 	}
 
-	// À§
+	// ìœ„
 	if (BallTop >= BoardTop)
 	{
-		BallY = BoardTop + R; // À§Ä¡ ÁöÁ¤
-		return f_BALL_Direct(ballobj);
+		BallY = BoardTop + R; // ìœ„ì¹˜ ì§€ì •
+		return f_BALL_Direct();
 	}
 
-	// ¾Æ·¡
+	// ì•„ë˜
 	if (BallBottom <= BoardBottom)
 	{
 		Failed(ballobj);
 	}
 
-	//Ãæµ¹ÇÏÁö ¾Ê¾ÒÀ»¶§
+	//ì¶©ëŒí•˜ì§€ ì•Šì•˜ì„ë•Œ
 	return false;
 }
 
-
-
-
-
-//7.½ÇÆĞÀ§Ä¡
-//¸®¼Â,Ã³À½È­¸é
-bool BALL::f_FailedPos() const
+//Ballì˜ ì´ë™ë°©í–¥ì— ë”°ë¼ ì´ë™ì‹œì¼œì£¼ëŠ” í•¨ìˆ˜ í•¨ìˆ˜
+void Ball::f_MoveBall()
 {
 
-	if (BallY >= 20)
+	switch (Ball_Direct)
 	{
-		return true;
+	case 0:
+		BallX -= 1;
+		BallY -= 1;
+		break;
+	case 1:
+		BallX -= 1;
+		BallY += 1;
+		break;
+	case 2:
+		BallX += 1;
+		BallY -= 1;
+		break;
+	case 3:
+		BallX += 1;
+		BallY += 1;
+		break;
 	}
-	else
-	{
-		return false;
-	}
 }
 
-
-BALL::~BALL()
+//ì½˜ì†”ì°½ì— Ballì„ ì¶œë ¥í•´ì£¼ëŠ” í•¨ìˆ˜
+void Ball::f_Ball_Render()
 {
-	cout << "°øÀÌ ¹Ù´ÚÀ¸·Î ¶³¾îÁ³½À´Ï´Ù. ";
+	gotoxy(BallX, BallY);
+	cout << "â—";
 }
 
-//¼Ò¸êÀÚ, ½ÇÆĞÀ§Ä¡¿¡°¡¸é È£Ãâ
 
-
-
-
-void BALL::Render()
-{
-	gotoxy(BallX-R, BallY-R);
-	cout << "¡İ";
-}
