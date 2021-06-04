@@ -1,54 +1,51 @@
 #ifndef __BALL_H__
 #define __BALL_H_
+#include"Bar.h"
+#include"Brick.h"
 using namespace std;
 
-#define R 1
-#define BALLSPEED 1.0
 
-//°øÀÇ ÀÌµ¿¹æÇâ
+
+//ê³µì˜ ì´ë™ë°©í–¥
 typedef enum _Direct	
 {
 	Left_top, Left_down, Right_top,Right_down
 	//  0		  1			  2			3
 }DIRECT;
 
-
-//¸·´ë±âÀÇ ³ôÀÌ
-#define BarHeight 1
-
-
-//ºí·ÏÀÇ °¡·Î±æÀÌ
-#define BrickWidth 2
-#define BrickHeight 1
-
-
-//f_BALLÀº ÇÔ¼ö BallÀº º¯¼ö
-
-
-class BALL
+class Ball
 {
 private:
-	//°øÀÇ ÁßÁ¡À§Ä¡
+	//ê³µì˜ ì™¼ìª½ìœ„
 	int BallX;
 	int BallY;
 
-	//°øÀÇ ÇöÀç»óÅÂ
-	bool InitBallMove=false , BallMoveX=true, BallMoveY=true;	 //ÃÊ±â¿¡ °¡¸¸È÷ÀÖ´Â BALL ¿À¸¥ÂÊ, À§ÂÊ True
+	//ê³µì˜ í˜„ì¬ìƒíƒœ
+	bool InitBallMove=false , BallMoveX=true, BallMoveY=true;	 //ì´ˆê¸°ì— ê°€ë§ŒíˆìˆëŠ” BALL ì˜¤ë¥¸ìª½, ìœ„ìª½ True
 	DIRECT Ball_Direct;
 
 public:
-	BALL();	
-
-	int f_InitBALL();
-	int f_BALL_Direct(const BALL& b);
-	int f_BALL_Brick(BALL& ballobj);
-	int f_BALL_Bar(BALL& ballobj);
-	int f_BALL_Board(BALL& ballobj);
-	bool f_FailedPos() const;
-
-	void Render();
-	~BALL();
+	int f_Ball_Get_Direct() const;
+	int f_Ball_Get_X() const;
+	int f_Ball_Get_Y() const;
+	void f_InitBALL();
+	int f_BALL_Direct();
+	int f_BALL_Brick (Brick& );
+	int f_BALL_Bar(Bar& );
+	int f_BALL_Board(Ball&);
+	void f_MoveBall();
+	void f_Ball_Render();
+	friend bool Failed(const Ball&);
 };
+
+bool Failed(const Ball& ballobj)
+{
+	if (ballobj.BallY<=20)
+		return true;
+	else
+		return false;
+}
+
 
 #endif 
 
