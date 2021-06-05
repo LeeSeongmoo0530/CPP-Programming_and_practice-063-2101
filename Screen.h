@@ -7,7 +7,7 @@
 void gotoxy(int x, int y);
 void ScreenLine();
 int InitScreen();
-void ScoreScreen(int Level, Brick& BrickObj);
+void ScoreScreen(int Level, Brick* BrickObj);
 void EndOfGame();
 void CursorView(char show);
 void SetConsoleView();
