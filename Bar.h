@@ -6,7 +6,7 @@ class Bar
 {
 private:
 	int x;
-	int y = 20;
+	int y = 25;
 	int size;
 public:
 	Bar(int level);
