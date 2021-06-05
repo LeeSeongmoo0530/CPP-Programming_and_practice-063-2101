@@ -96,6 +96,26 @@ void ScoreScreen(int Level, Brick* BrickObj)
 	
 }
 
+//벽돌을 모두 깼을때
+void SuccessScreen()
+{
+	system("cls");
+	gotoxy(5, 3);
+	cout << "**************************************************";
+	for (int i = 0; i < 10; i++)
+	{
+		gotoxy(5, 4 + i);
+		cout << "*                                                *";
+	}
+	gotoxy(5, 14);
+	cout << "**************************************************";
+	gotoxy(20, 8);
+	cout << "축하드립니다";
+	gotoxy(20, 10);
+	cout << ("벽돌을 다 깨셨습니다");
+
+}
+
 //게임 끝날때 띄우는창
 void EndOfGame()
 {
