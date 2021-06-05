@@ -25,12 +25,12 @@ public:
 	int f_Ball_Get_X() const;
 	int f_Ball_Get_Y() const;
 	void f_InitBALL();
-	bool f_BALL_Brick (Ball& , Brick&);
-	bool f_BALL_Bar(Ball&, Bar&);
-	bool f_BALL_Board(Ball&);
-	void f_MoveBall(Ball&);
+	bool f_BALL_Brick (Ball* , Brick*);
+	bool f_BALL_Bar(Ball*, Bar*);
+	bool f_BALL_Board(Ball*);
+	void f_MoveBall(Ball*);
 	void Render();
-	friend bool Failed(const Ball& ballobj);
+	friend bool Failed(const Ball* ballobj);
 };
 
 #endif 
