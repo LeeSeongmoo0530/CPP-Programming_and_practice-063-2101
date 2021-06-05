@@ -1,17 +1,13 @@
+#pragma once
 #ifndef __BALL_H__
 #define __BALL_H_
-#include"Bar.h"
+#include "Bar.h"
 #include"Brick.h"
-using namespace std;
-
-
-
 //공의 이동방향
-typedef enum _Direct	
-{
-	Left_top, Left_down, Right_top,Right_down
-	//  0		  1			  2			3
-}DIRECT;
+#define Left_top 0
+#define Left_down 1
+#define Right_top 2
+#define Right_down 3
 
 class Ball
 {
@@ -21,31 +17,22 @@ private:
 	int BallY;
 
 	//공의 현재상태
-	bool InitBallMove=false , BallMoveX=true, BallMoveY=true;	 //초기에 가만히있는 BALL 오른쪽, 위쪽 True
-	DIRECT Ball_Direct;
-
+	bool InitBallMove=false , BallMoveX=true, BallMoveY=true;	 //초기에 가만히있는 BALL , 오른쪽, 위쪽 True
+	int Ball_Direct;
 public:
+	Ball();
 	int f_Ball_Get_Direct() const;
 	int f_Ball_Get_X() const;
 	int f_Ball_Get_Y() const;
+	//int f_BALL_Direct();
 	void f_InitBALL();
-	int f_BALL_Direct();
-	int f_BALL_Brick (Brick& );
-	int f_BALL_Bar(Bar& );
-	int f_BALL_Board(Ball&);
-	void f_MoveBall();
-	void f_Ball_Render();
-	friend bool Failed(const Ball&);
+	bool f_BALL_Brick (Ball& , Brick&);
+	bool f_BALL_Bar(Ball&, Bar&);
+	bool f_BALL_Board(Ball&);
+	void f_MoveBall(Ball&);
+	void Render();
+	friend bool Failed(const Ball& ballobj);
 };
-
-bool Failed(const Ball& ballobj)
-{
-	if (ballobj.BallY<=20)
-		return true;
-	else
-		return false;
-}
-
 
 #endif 
 
