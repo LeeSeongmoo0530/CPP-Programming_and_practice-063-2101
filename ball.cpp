@@ -36,7 +36,7 @@ int Ball::f_Ball_Get_Y() const
 Ball::Ball()
 {
 	BallX = 24;
-	BallY = 19;
+	BallY = 24;
 }
 
 //2.초기발사 왼쪽위 or오른쪽위
@@ -44,7 +44,7 @@ Ball::Ball()
 void Ball:: f_InitBALL()
 {
 	BallX = 24;
-	BallY = 19;
+	BallY = 24;
 	InitBallMove = true;
 
 	srand((unsigned int)time(NULL));
@@ -66,45 +66,6 @@ void Ball:: f_InitBALL()
 	}
 }
 
-
-////다른 객체들과 충돌할때 호출되어 공의 방향을 바꿔줍니다
-////3.이동방향함수
-//int Ball::f_BALL_Direct()
-//{
-//	
-//	// 공이 움직이지 않으면 리턴
-//	if (!InitBallMove)
-//		return 0;
-//
-//	switch (Ball_Direct)
-//	{
-//		//공의 방향이 Left_top이면 공의 방향을 Left_down으로 바꿔줌
-//	case 0:
-//		Ball_Direct = Left_down;
-//		BallMoveX = false;
-//		BallMoveY = false;
-//		return Ball_Direct;
-//		//Left_down -> Left_top
-//	case 1:
-//		Ball_Direct = Left_top;
-//		BallMoveX = false;
-//		BallMoveY = true;
-//		return Ball_Direct;
-//		//Right_top->Right_down
-//	case 2:
-//		Ball_Direct = Right_down;
-//		BallMoveX = true;
-//		return Ball_Direct;
-//		//Right_down -> Right_top
-//	case 3:
-//		Ball_Direct = Right_top;
-//		BallMoveX = true;
-//		BallMoveY = true;
-//		return Ball_Direct;
-//	}
-//}
-
-
 //4.벽돌과 충돌판정 함수
 bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 {
@@ -113,58 +74,88 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 
 	int BallTop = ballobj.BallY;
 	int BallBottom = ballobj.BallY + R;
-	int BallLeft = ballobj.BallX ;
-	int BallRight = ballobj.BallX + 2*R;
+	int BallLeft = ballobj.BallX;
+	int BallRight = ballobj.BallX + 2 * R;
 
-	int BrickNumY=3, BrickNumX = 20;
+	int BrickNumY = 3, BrickNumX = 20;
 	int BrickX, BrickY;
 	int BrickLeft, BrickRight, BrickTop, BrickBottom;
 	// Brick[]-XY블록 2차원 배열 ,  BrickNumX Y - X, Y 블록갯수 
 	for (int y = 0; y < BrickNumY; y++)
 	{
-		for (int x = 0; x < BrickNumX; x++)
+		for (int x = 0; x< BrickNumX; x++)
 		{
+
 			// 벽돌이 죽어있는 경우 다음 블록으로
 			//Brick.on 블록이 살아있는지
-			if ((Brickobj.get_coord(x,y).get_display_signal()==0))
+			if (!Brickobj.get_display_signal(x,y))
 			{
 				continue;
 			}
 
-			BrickLeft = Brickobj.get_coord(x, y).get_x();
+			BrickLeft = Brickobj.get_x(x,y);
 			BrickRight = BrickLeft + BrickWidth;
-			BrickTop = Brickobj.get_coord(x, y).get_y();
-			BrickBottom = BrickTop +BrickHeight;
-			
+			BrickTop = Brickobj.get_y(x,y);
+			BrickBottom = BrickTop + BrickHeight;
+
 			int index;
-			if (x == 0) 
+			if (y== 0)
 			{
 				index = x + y;
 			}
-			else if (x == 1)
+			else if (y == 1)
 			{
-				index=x + y + 19;
+				index = x + y + 20;
 			}
-			else if (x == 2)
+			else if (y == 2)
 			{
-				index=x + y + 39;
+				index = x + y + 40;
 			}
 
 			// 공하고 벽돌하고 충돌 체크
 
 			// 상하가 부딪치는 경우
-			if ( BrickLeft-R<=BallLeft<=BrickLeft+R)
+			if (BallLeft == BrickLeft)
 			{
 				// 아랫면 충돌
-				if (ballobj.BallMoveY && (BallTop >= BrickBottom) && (BallTop - BrickBottom ==0))
+				if (ballobj.BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
 				{
 					Brickobj.delete_bricks(index);
 					ballobj.BallMoveY = !ballobj.BallMoveY;
 					return true;
 				}
-
 				// 윗면 충돌
-				if (!ballobj.BallMoveY && (BallBottom <= BrickTop) && (BallBottom - BrickTop ==0))
+				if (!ballobj.BallMoveY && (BallBottom <= BrickBottom) && ( BrickBottom- BallBottom  <= BrickHeight))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveY = !ballobj.BallMoveY;
+					return true;
+				}
+			}
+			else if (BallLeft <= BrickRight && BallRight >= BrickRight)
+			{
+				if (ballobj.BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveY = !ballobj.BallMoveY;
+					return true;
+				}
+				if (!ballobj.BallMoveY && (BallBottom <= BrickBottom) && (BrickBottom - BallBottom <= BrickHeight))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveY = !ballobj.BallMoveY;
+					return true;
+				}
+			}
+			else if (BallLeft <= BrickLeft && BallRight >= BrickLeft)
+			{
+				if (ballobj.BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveY = !ballobj.BallMoveY;
+					return true;
+				}
+				if (!ballobj.BallMoveY && (BallBottom <= BrickBottom) && (BrickBottom - BallBottom <= BrickHeight))
 				{
 					Brickobj.delete_bricks(index);
 					ballobj.BallMoveY = !ballobj.BallMoveY;
@@ -172,18 +163,51 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 				}
 			}
 
+				
 			// 좌우가 부딪치는 경우
-			if ( BallTop == BrickTop && BallBottom == BrickBottom)
+			if (BallTop == BrickTop && BallBottom == BrickBottom)
 			{
 				//왼쪽면 충돌
-				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BallRight -BrickLeft==0))
+				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BrickLeft-BallRight  <= 0))
 				{
 					Brickobj.delete_bricks(index);
 					ballobj.BallMoveX = !ballobj.BallMoveX;
 					return true;
 				}
 				// 오른쪽면 충돌
-				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft-BrickRight == 0 ))
+				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveX = !ballobj.BallMoveX;
+					return true;
+				}
+			}
+			//벽돌이 위에서 올때
+			else if (BallBottom<=BrickTop && (BrickTop-BallTop<=R))
+			{
+				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BrickLeft - BallRight <= 0))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveX = !ballobj.BallMoveX;
+					return true;
+				}
+				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveX = !ballobj.BallMoveX;
+					return true;
+				}
+			}
+			//벽돌이 아래에서 올때
+			else if (BallTop>=BrickBottom && BallBottom-BrickBottom<=R)
+			{
+				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BrickLeft - BallRight <= 0))
+				{
+					Brickobj.delete_bricks(index);
+					ballobj.BallMoveX = !ballobj.BallMoveX;
+					return true;
+				}
+				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
 				{
 					Brickobj.delete_bricks(index);
 					ballobj.BallMoveX = !ballobj.BallMoveX;
@@ -192,11 +216,13 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 			}
 		}
 	}
-
 	//충돌하지 않았을때
 	return false;
 	
 }
+
+	
+	
 
 
 
@@ -225,10 +251,20 @@ bool Ball::f_BALL_Bar(Ball& ballobj, Bar& Barobj)
 	
 	// 사각형 바와 원형 공의 충돌 처리
 	// 높이
-	if (BarTop >= BallBottom  && (BarTop-BallBottom==0))
+	if (BarTop >= BallBottom  && (BarTop-BallBottom<=0))
 	{
 		// 좌우
-		if (BallRight < BarLeft || BallLeft < BarRight)
+		if (BallLeft<=BarLeft && BallRight>=BarLeft)
+		{
+			ballobj.BallMoveY = !ballobj.BallMoveY;
+			return true;
+		}
+		else if (BallLeft>=BarLeft && BallRight<=BarRight)
+		{
+			ballobj.BallMoveY = !ballobj.BallMoveY;
+			return true;
+		}
+		else if (BallLeft<=BarRight && BallRight>=BarRight)
 		{
 			ballobj.BallMoveY = !ballobj.BallMoveY;
 			return true;
@@ -259,7 +295,7 @@ bool Ball::f_BALL_Board(Ball& ballobj)
 	int BoardLeft = 0;
 	int BoardRight = 50;
 	int BoardTop = 0;
-	int BoardBottom = 25;
+	int BoardBottom = 30;
 
 	// 왼쪽
 	if (BallLeft == BoardLeft)
@@ -287,7 +323,7 @@ bool Ball::f_BALL_Board(Ball& ballobj)
 	}
 
 	// 아래
-	if (ballobj.BallY > 20)
+	if (ballobj.BallY > 25)
 	{
 		InitBallMove = false;
 	}
@@ -344,7 +380,7 @@ void Ball::Render()
 }
 bool Failed(const Ball& ballobj)
 {
-	if (ballobj.BallY> 20)
+	if (ballobj.BallY> 25)
 		return true;
 	else
 		return false;
