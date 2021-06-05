@@ -11,6 +11,7 @@ void ScoreScreen(int Level, Brick* BrickObj);
 void EndOfGame();
 void CursorView(char show);
 void SetConsoleView();
+void SuccessScreen();
 
 
 #endif
