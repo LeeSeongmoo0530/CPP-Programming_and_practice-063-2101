@@ -1,5 +1,5 @@
 #include <iostream>
-#include <conio.h> //getchÇÔ¼ö»ç¿ë
+#include <conio.h> //getchí•¨ìˆ˜ì‚¬ìš©
 #include <Windows.h>
 #include "Screen.h"
 #include"Bar.h"
@@ -36,7 +36,7 @@ void Bar::InitBar()
 
 Bar::Bar(int level) 
 {
-	//³­ÀÌµµº°
+	//ë‚œì´ë„ë³„
 	switch (level) 
 	{		
 	case 1:
@@ -65,15 +65,16 @@ void Bar:: Render()
 	gotoxy(x, y);
 	for (int i = 0; i < (size/2) ; i++)
 	{
-		cout << "¢Ã";
+		cout << "â–£";
 	}
 }
 
 void Bar::input()
 {
-	int i = _getch();
-	if (_kbhit())
+	
+	if (int i = _kbhit())
 	{
+		i = _getch();
 		if (i == 224)
 		{
 			i = _getch();
@@ -81,12 +82,12 @@ void Bar::input()
 			{
 			case LEFT:
 			{
-				x--; break; //¿ŞÂÊÀ¸·Î ÀÌµ¿
+				x--; break; //ì™¼ìª½ìœ¼ë¡œ ì´ë™
 			}
 			case RIGHT:
 			{
 				x++;
-				break; //¿À¸¥ÂÊÀ¸·Î ÀÌµ¿
+				break; //ì˜¤ë¥¸ìª½ìœ¼ë¡œ ì´ë™
 			}
 			}
 		}
@@ -108,4 +109,3 @@ void Bar::input()
 
 	
 }
-
