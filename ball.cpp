@@ -66,16 +66,16 @@ void Ball:: f_InitBALL()
 	}
 }
 
-//4.벽돌과 충돌판정 함수
-bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
+//4->벽돌과 충돌판정 함수
+bool Ball::f_BALL_Brick(Ball* ballobj, Brick* Brickobj)
 {
-	if (!ballobj.InitBallMove)
+	if (!ballobj->InitBallMove)
 		return false;
 
-	int BallTop = ballobj.BallY;
-	int BallBottom = ballobj.BallY + R;
-	int BallLeft = ballobj.BallX;
-	int BallRight = ballobj.BallX + 2 * R;
+	int BallTop = ballobj->BallY;
+	int BallBottom = ballobj->BallY + R;
+	int BallLeft = ballobj->BallX;
+	int BallRight = ballobj->BallX + 2 * R;
 
 	int BrickNumY = 3, BrickNumX = 20;
 	int BrickX, BrickY;
@@ -87,15 +87,15 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 		{
 
 			// 벽돌이 죽어있는 경우 다음 블록으로
-			//Brick.on 블록이 살아있는지
-			if (!Brickobj.get_display_signal(x,y))
+			//블록이 살아있는지
+			if (!Brickobj->get_display_signal(x,y))
 			{
 				continue;
 			}
 
-			BrickLeft = Brickobj.get_x(x,y);
+			BrickLeft = Brickobj->get_x(x,y);
 			BrickRight = BrickLeft + BrickWidth;
-			BrickTop = Brickobj.get_y(x,y);
+			BrickTop = Brickobj->get_y(x,y);
 			BrickBottom = BrickTop + BrickHeight;
 
 			int index;
@@ -118,47 +118,47 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 			if (BallLeft == BrickLeft)
 			{
 				// 아랫면 충돌
-				if (ballobj.BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
+				if (ballobj->BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveY = !ballobj.BallMoveY;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveY = !ballobj->BallMoveY;
 					return true;
 				}
 				// 윗면 충돌
-				if (!ballobj.BallMoveY && (BallBottom <= BrickBottom) && ( BrickBottom- BallBottom  <= BrickHeight))
+				if (!ballobj->BallMoveY && (BallBottom <= BrickBottom) && ( BrickBottom- BallBottom  <= BrickHeight))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveY = !ballobj.BallMoveY;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveY = !ballobj->BallMoveY;
 					return true;
 				}
 			}
 			else if (BallLeft <= BrickRight && BallRight >= BrickRight)
 			{
-				if (ballobj.BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
+				if (ballobj->BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveY = !ballobj.BallMoveY;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveY = !ballobj->BallMoveY;
 					return true;
 				}
-				if (!ballobj.BallMoveY && (BallBottom <= BrickBottom) && (BrickBottom - BallBottom <= BrickHeight))
+				if (!ballobj->BallMoveY && (BallBottom <= BrickBottom) && (BrickBottom - BallBottom <= BrickHeight))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveY = !ballobj.BallMoveY;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveY = !ballobj->BallMoveY;
 					return true;
 				}
 			}
 			else if (BallLeft <= BrickLeft && BallRight >= BrickLeft)
 			{
-				if (ballobj.BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
+				if (ballobj->BallMoveY && (BallTop >= BrickTop) && (BallTop - BrickTop <= BrickHeight))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveY = !ballobj.BallMoveY;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveY = !ballobj->BallMoveY;
 					return true;
 				}
-				if (!ballobj.BallMoveY && (BallBottom <= BrickBottom) && (BrickBottom - BallBottom <= BrickHeight))
+				if (!ballobj->BallMoveY && (BallBottom <= BrickBottom) && (BrickBottom - BallBottom <= BrickHeight))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveY = !ballobj.BallMoveY;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveY = !ballobj->BallMoveY;
 					return true;
 				}
 			}
@@ -168,49 +168,49 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 			if (BallTop == BrickTop && BallBottom == BrickBottom)
 			{
 				//왼쪽면 충돌
-				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BrickLeft-BallRight  <= 0))
+				if (ballobj->BallMoveX && (BallRight <= BrickLeft) && (BrickLeft-BallRight  <= 0))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveX = !ballobj.BallMoveX;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveX = !ballobj->BallMoveX;
 					return true;
 				}
 				// 오른쪽면 충돌
-				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
+				if (!ballobj->BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveX = !ballobj.BallMoveX;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveX = !ballobj->BallMoveX;
 					return true;
 				}
 			}
 			//벽돌이 위에서 올때
 			else if (BallBottom<=BrickTop && (BrickTop-BallTop<=R))
 			{
-				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BrickLeft - BallRight <= 0))
+				if (ballobj->BallMoveX && (BallRight <= BrickLeft) && (BrickLeft - BallRight <= 0))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveX = !ballobj.BallMoveX;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveX = !ballobj->BallMoveX;
 					return true;
 				}
-				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
+				if (!ballobj->BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveX = !ballobj.BallMoveX;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveX = !ballobj->BallMoveX;
 					return true;
 				}
 			}
 			//벽돌이 아래에서 올때
 			else if (BallTop>=BrickBottom && BallBottom-BrickBottom<=R)
 			{
-				if (ballobj.BallMoveX && (BallRight <= BrickLeft) && (BrickLeft - BallRight <= 0))
+				if (ballobj->BallMoveX && (BallRight <= BrickLeft) && (BrickLeft - BallRight <= 0))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveX = !ballobj.BallMoveX;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveX = !ballobj->BallMoveX;
 					return true;
 				}
-				if (!ballobj.BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
+				if (!ballobj->BallMoveX && (BallLeft >= BrickRight) && (BallLeft - BrickRight <= 0))
 				{
-					Brickobj.delete_bricks(index);
-					ballobj.BallMoveX = !ballobj.BallMoveX;
+					Brickobj->delete_bricks(index);
+					ballobj->BallMoveX = !ballobj->BallMoveX;
 					return true;
 				}
 			}
@@ -228,26 +228,26 @@ bool Ball::f_BALL_Brick(Ball& ballobj, Brick& Brickobj)
 
 
 //5.막대와 충돌판정 함수
-bool Ball::f_BALL_Bar(Ball& ballobj, Bar& Barobj)
+bool Ball::f_BALL_Bar(Ball* ballobj, Bar* Barobj)
 {
-	if (!ballobj.InitBallMove)
+	if (!ballobj->InitBallMove)
 	{
 		return false;
 	}
 
 	// 공 방향이 위이면 리턴
-	if (ballobj.BallMoveY)
+	if (ballobj->BallMoveY)
 	{
 		return false;
 	}
-	int BallBottom = ballobj.BallY + R;
-	int BallLeft = ballobj.BallX;
-	int BallRight = ballobj.BallX + 2*R;
+	int BallBottom = ballobj->BallY + R;
+	int BallLeft = ballobj->BallX;
+	int BallRight = ballobj->BallX + 2*R;
 	
-	int BarTop = Barobj.Get_Y();
-	int BarBottom= Barobj.Get_Y()+BarHeight;
-	int BarLeft = Barobj.Get_X();
-	int BarRight = Barobj.Get_X()+Barobj.Get_Size(); //+레벨에 따른 길이;
+	int BarTop = Barobj->Get_Y();
+	int BarBottom= Barobj->Get_Y()+BarHeight;
+	int BarLeft = Barobj->Get_X();
+	int BarRight = Barobj->Get_X()+Barobj->Get_Size(); //+레벨에 따른 길이;
 	
 	// 사각형 바와 원형 공의 충돌 처리
 	// 높이
@@ -256,17 +256,17 @@ bool Ball::f_BALL_Bar(Ball& ballobj, Bar& Barobj)
 		// 좌우
 		if (BallLeft<=BarLeft && BallRight>=BarLeft)
 		{
-			ballobj.BallMoveY = !ballobj.BallMoveY;
+			ballobj->BallMoveY = !ballobj->BallMoveY;
 			return true;
 		}
 		else if (BallLeft>=BarLeft && BallRight<=BarRight)
 		{
-			ballobj.BallMoveY = !ballobj.BallMoveY;
+			ballobj->BallMoveY = !ballobj->BallMoveY;
 			return true;
 		}
 		else if (BallLeft<=BarRight && BallRight>=BarRight)
 		{
-			ballobj.BallMoveY = !ballobj.BallMoveY;
+			ballobj->BallMoveY = !ballobj->BallMoveY;
 			return true;
 		}
 	}
@@ -279,18 +279,18 @@ bool Ball::f_BALL_Bar(Ball& ballobj, Bar& Barobj)
 
 
 //6.벽과 충돌판정 함수
-bool Ball::f_BALL_Board(Ball& ballobj)
+bool Ball::f_BALL_Board(Ball* ballobj)
 
 {
-	if (!ballobj.InitBallMove)
+	if (!ballobj->InitBallMove)
 	{
 		return false;
 	}
 		
-	int BallTop = ballobj.BallY;
-	int BallBottom = ballobj.BallY+R;
-	int BallLeft = ballobj.BallX;
-	int BallRight = ballobj.BallX + 2*R;
+	int BallTop = ballobj->BallY;
+	int BallBottom = ballobj->BallY+R;
+	int BallLeft = ballobj->BallX;
+	int BallRight = ballobj->BallX + 2*R;
 
 	int BoardLeft = 0;
 	int BoardRight = 50;
@@ -300,8 +300,8 @@ bool Ball::f_BALL_Board(Ball& ballobj)
 	// 왼쪽
 	if (BallLeft == BoardLeft)
 	{
-		ballobj.BallX = BoardLeft; // 위치 지정
-		ballobj.BallMoveX = !ballobj.BallMoveX;
+		ballobj->BallX = BoardLeft; // 위치 지정
+		ballobj->BallMoveX = !ballobj->BallMoveX;
 		return true;
 	}
 
@@ -309,21 +309,21 @@ bool Ball::f_BALL_Board(Ball& ballobj)
 	if (BallRight == BoardRight)
 	{
 	
-		ballobj.BallX = BoardRight - 2*R; // 위치 지정
-		ballobj.BallMoveX = !ballobj.BallMoveX;
+		ballobj->BallX = BoardRight - 2*R; // 위치 지정
+		ballobj->BallMoveX = !ballobj->BallMoveX;
 		return true;
 	}
 
 	// 위
 	if (BallTop == BoardTop)
 	{
-		ballobj.BallY = BoardTop ; // 위치 지정
-		ballobj.BallMoveY = !ballobj.BallMoveY;
+		ballobj->BallY = BoardTop ; // 위치 지정
+		ballobj->BallMoveY = !ballobj->BallMoveY;
 		return true;
 	}
 
 	// 아래
-	if (ballobj.BallY > 25)
+	if (ballobj->BallY > 25)
 	{
 		InitBallMove = false;
 	}
@@ -333,41 +333,41 @@ bool Ball::f_BALL_Board(Ball& ballobj)
 }
 
 //Ball의 이동방향에 따라 이동시켜주는 함수 함수
-void Ball::f_MoveBall(Ball& ballobj)
+void Ball::f_MoveBall(Ball* ballobj)
 {
 
-	if (ballobj.BallMoveX == false && ballobj.BallMoveY == true)
+	if (ballobj->BallMoveX == false && ballobj->BallMoveY == true)
 	{
-		ballobj.Ball_Direct = Left_top;
+		ballobj->Ball_Direct = Left_top;
 	}
-	else if (ballobj.BallMoveX == false && ballobj.BallMoveY == false)
+	else if (ballobj->BallMoveX == false && ballobj->BallMoveY == false)
 	{
-		ballobj.Ball_Direct = Left_down;
+		ballobj->Ball_Direct = Left_down;
 	}
-	else if (ballobj.BallMoveX == true && ballobj.BallMoveY == true)
+	else if (ballobj->BallMoveX == true && ballobj->BallMoveY == true)
 	{
-		ballobj.Ball_Direct = Right_top;
+		ballobj->Ball_Direct = Right_top;
 	}
 	else
-		ballobj.Ball_Direct = Right_down;
+		ballobj->Ball_Direct = Right_down;
 
-	switch (ballobj.Ball_Direct)
+	switch (ballobj->Ball_Direct)
 	{
 	case 0:
-		ballobj.BallX -= 1;
-		ballobj.BallY -= 1;
+		ballobj->BallX -= 1;
+		ballobj->BallY -= 1;
 		break;
 	case 1:
-		ballobj.BallX -= 1;
-		ballobj.BallY += 1;
+		ballobj->BallX -= 1;
+		ballobj->BallY += 1;
 		break;
 	case 2:
-		ballobj.BallX += 1;
-		ballobj.BallY -= 1;
+		ballobj->BallX += 1;
+		ballobj->BallY -= 1;
 		break;
 	case 3:
-		ballobj.BallX += 1;
-		ballobj.BallY += 1;
+		ballobj->BallX += 1;
+		ballobj->BallY += 1;
 		break;
 	}
 }
@@ -378,9 +378,9 @@ void Ball::Render()
 	gotoxy(BallX, BallY);
 	cout << "◎";
 }
-bool Failed(const Ball& ballobj)
+bool Failed(const Ball* ballobj)
 {
-	if (ballobj.BallY> 25)
+	if (ballobj->BallY>25)
 		return true;
 	else
 		return false;
