@@ -48,6 +48,7 @@ void ScreenLine()
 //게임 초기화면 - 난이도를 입력받음
 int InitScreen()
 {
+	ScreenLine();
 	gotoxy(15, 2);
 	cout << "*******************";
 	gotoxy(15, 3);
@@ -75,7 +76,7 @@ int InitScreen()
 
 
 //점수와 난이도 출력 창 - Board 옆에 계속 출력
-void ScoreScreen(int Level, Brick& BrickObj)
+void ScoreScreen(int Level, Brick* BrickObj)
 {
 	gotoxy(55, 5);
 	if (Level == 1)
@@ -91,7 +92,7 @@ void ScoreScreen(int Level, Brick& BrickObj)
 		cout << "난이도  :  하";
 	}
 	gotoxy(55, 7);
-	BrickObj.score_print();
+	BrickObj->score_print();
 	
 }
 
