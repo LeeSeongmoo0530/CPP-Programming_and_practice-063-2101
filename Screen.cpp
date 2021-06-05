@@ -7,7 +7,7 @@
 using namespace std;
 
 
-//가로 50 세로 25 그림들 하나 크키는 2 X 1
+//가로 50 세로 30 그림들 하나 크키는 2 X 1
 //(0,0) ---------------------------> x
 //	｜
 //	｜
@@ -32,16 +32,15 @@ void gotoxy(int x, int y)
 //Board- 게임에서 양 벽을 그리는 함수 -
 void ScreenLine()
 {
-	system("cls");
 	gotoxy(0, 0);
 	cout << "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
-	for (int i = 1; i < 25; i++)
+	for (int i = 1; i < 30;i++)
 	{
 		gotoxy(0, i);
 		cout << "┃                                                ┃";
 	}
 
-	gotoxy(0, 25);
+	gotoxy(0, 30);
 	cout << "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
 }
 
@@ -49,14 +48,15 @@ void ScreenLine()
 //게임 초기화면 - 난이도를 입력받음
 int InitScreen()
 {
-	system("cls");
-	gotoxy(2, 2);
-	cout << "********************************************************************\n";
-	cout << "                          벽 돌 깨 기 게 임                         \n";
-	gotoxy(2, 4);
-	cout << "********************************************************************\n";
-	cout << endl << endl;
-	cout << "                난이도를 선택하세요 1. 상   2. 중   3.하";
+	gotoxy(15, 2);
+	cout << "*******************";
+	gotoxy(15, 3);
+	cout << "*벽 돌 깨 기 게 임*";
+	gotoxy(15, 4);
+	cout << "*******************";
+	gotoxy(5, 6);
+	cout << "난이도를 선택하세요 1. 상   2. 중   3.하";
+	
 	int Level;
 	while (1)
 	{
@@ -77,8 +77,6 @@ int InitScreen()
 //점수와 난이도 출력 창 - Board 옆에 계속 출력
 void ScoreScreen(int Level, Brick& BrickObj)
 {
-
-
 	gotoxy(55, 5);
 	if (Level == 1)
 	{
@@ -92,9 +90,9 @@ void ScoreScreen(int Level, Brick& BrickObj)
 	{
 		cout << "난이도  :  하";
 	}
-
 	gotoxy(55, 7);
 	BrickObj.score_print();
+	
 }
 
 //게임 끝날때 띄우는창
@@ -114,6 +112,7 @@ void EndOfGame()
 	cout << "게임을 종료합니다";
 	gotoxy(20, 10);
 	cout << "수고하셨습니다.";
+	gotoxy(0, 30);
 
 }
 //커서 안보이게 (show=0 이면 안보임 1이면 보임)
