@@ -24,7 +24,6 @@ public:
 	int f_Ball_Get_Direct() const;
 	int f_Ball_Get_X() const;
 	int f_Ball_Get_Y() const;
-	//int f_BALL_Direct();
 	void f_InitBALL();
 	bool f_BALL_Brick (Ball& , Brick&);
 	bool f_BALL_Bar(Ball&, Bar&);
