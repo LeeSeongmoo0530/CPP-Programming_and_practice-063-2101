@@ -82,11 +82,11 @@ void Bar::input()
 			{
 			case LEFT:
 			{
-				x--; break; //왼쪽으로 이동
+				x-=2; break; //왼쪽으로 이동
 			}
 			case RIGHT:
 			{
-				x++;
+				x+=2;
 				break; //오른쪽으로 이동
 			}
 			}
@@ -109,3 +109,4 @@ void Bar::input()
 
 	
 }
+
