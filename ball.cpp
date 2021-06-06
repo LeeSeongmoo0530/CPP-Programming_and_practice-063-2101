@@ -36,7 +36,7 @@ int Ball::f_Ball_Get_Y() const
 Ball::Ball()
 {
 	BallX = 24;
-	BallY = 24;
+	BallY = 29;
 }
 
 //2.초기발사 왼쪽위 or오른쪽위
@@ -44,7 +44,7 @@ Ball::Ball()
 void Ball:: f_InitBALL()
 {
 	BallX = 24;
-	BallY = 24;
+	BallY = 29;
 	InitBallMove = true;
 
 	srand((unsigned int)time(NULL));
@@ -295,7 +295,7 @@ bool Ball::f_BALL_Board(Ball* ballobj)
 	int BoardLeft = 0;
 	int BoardRight = 50;
 	int BoardTop = 0;
-	int BoardBottom = 30;
+	int BoardBottom = 35;
 
 	// 왼쪽
 	if (BallLeft == BoardLeft)
@@ -323,7 +323,7 @@ bool Ball::f_BALL_Board(Ball* ballobj)
 	}
 
 	// 아래
-	if (ballobj->BallY > 25)
+	if (ballobj->BallY > 30)
 	{
 		InitBallMove = false;
 	}
@@ -380,7 +380,7 @@ void Ball::Render()
 }
 bool Failed(const Ball* ballobj)
 {
-	if (ballobj->BallY>25)
+	if (ballobj->BallY>30)
 		return true;
 	else
 		return false;
