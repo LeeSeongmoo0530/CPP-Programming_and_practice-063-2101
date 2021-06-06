@@ -7,7 +7,7 @@
 using namespace std;
 
 
-//가로 50 세로 30 그림들 하나 크키는 2 X 1
+//가로 50 세로 35 그림들 하나 크키는 2 X 1
 //(0,0) ---------------------------> x
 //	｜
 //	｜
@@ -34,13 +34,13 @@ void ScreenLine()
 {
 	gotoxy(0, 0);
 	cout << "┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓";
-	for (int i = 1; i < 30;i++)
+	for (int i = 1; i < 35;i++)
 	{
 		gotoxy(0, i);
 		cout << "┃                                                ┃";
 	}
 
-	gotoxy(0, 30);
+	gotoxy(0, 35);
 	cout << "┗━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┛";
 }
 
@@ -153,6 +153,6 @@ void CursorView(char show)
 //콘솔창 크기와 제목
 void SetConsoleView()
 {
-	system("mode con:cols=100 lines=50");
+	system("mode con:cols=100 lines=55");
 	system("title Break_Bricks");
 }
