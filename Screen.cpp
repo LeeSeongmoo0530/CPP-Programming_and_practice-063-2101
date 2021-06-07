@@ -29,7 +29,28 @@ void gotoxy(int x, int y)
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), CurSorPosition);
 }
 
-//Board- 게임에서 양 벽을 그리는 함수 -
+//커서 안보이게 (show=0 이면 안보임 1이면 보임)
+void CursorView(char show)
+{
+	HANDLE hConsole;
+	CONSOLE_CURSOR_INFO ConsoleCursor;
+
+	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+	ConsoleCursor.bVisible = show;
+	ConsoleCursor.dwSize = 1;
+
+	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
+}
+
+//콘솔창 크기와 제목
+void SetConsoleView()
+{
+	system("mode con:cols=100 lines=55");
+	system("title Break_Bricks");
+}
+
+//Board- 게임에서 양 벽(경계)을 그리는 함수 (가로 50, 세로 35)
 void ScreenLine()
 {
 	gotoxy(0, 0);
@@ -45,7 +66,7 @@ void ScreenLine()
 }
 
 
-//게임 초기화면 - 난이도를 입력받음
+//게임 초기화면 - 난이도를 입력받아 Bar의 인수로 사용
 int InitScreen()
 {
 	ScreenLine();
@@ -96,7 +117,7 @@ void ScoreScreen(int Level, Brick* BrickObj)
 	
 }
 
-//벽돌을 모두 깼을때
+//벽돌을 모두 깼을때 게임 Success
 void SuccessScreen()
 {
 	system("cls");
@@ -116,7 +137,7 @@ void SuccessScreen()
 
 }
 
-//게임 끝날때 띄우는창
+//게임을 종료할때 띄우는창
 void EndOfGame()
 {
 	system("cls");
@@ -136,23 +157,4 @@ void EndOfGame()
 	gotoxy(0, 30);
 
 }
-//커서 안보이게 (show=0 이면 안보임 1이면 보임)
-void CursorView(char show)
-{
-	HANDLE hConsole;
-	CONSOLE_CURSOR_INFO ConsoleCursor;
 
-	hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-
-	ConsoleCursor.bVisible = show;
-	ConsoleCursor.dwSize = 1;
-
-	SetConsoleCursorInfo(hConsole, &ConsoleCursor);
-}
-
-//콘솔창 크기와 제목
-void SetConsoleView()
-{
-	system("mode con:cols=100 lines=55");
-	system("title Break_Bricks");
-}
