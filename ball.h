@@ -17,18 +17,21 @@ private:
 	int BallY;
 
 	//공의 현재상태
-	bool InitBallMove=false , BallMoveX=true, BallMoveY=true;	 //초기에 가만히있는 BALL , 오른쪽, 위쪽 True
+	bool InitBallMove = false, BallMoveX = true, BallMoveY = true;	 //초기에 가만히있는 BALL , 오른쪽, 위쪽 True
+	//공의 이동방향
 	int Ball_Direct;
 public:
 	Ball();
 	int f_Ball_Get_Direct() const;
 	int f_Ball_Get_X() const;
 	int f_Ball_Get_Y() const;
+
 	void f_InitBALL();
-	bool f_BALL_Brick (Ball* , Brick*);
+	bool f_BALL_Brick(Ball*, Brick*);
 	bool f_BALL_Bar(Ball*, Bar*);
 	bool f_BALL_Board(Ball*);
 	void f_MoveBall(Ball*);
+
 	void Render();
 	friend bool Failed(const Ball* ballobj);
 };
